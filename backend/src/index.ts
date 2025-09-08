@@ -18,12 +18,30 @@ import contactRoutes from "./routes/contactRoutes";
 
 const app = express();
 const port = process.env.PORT || 12000;
+// app.use(
+//   cors({ 
+//     origin: ["http://localhost:5173", "http://localhost:5174", "https://sthaannix-real-estate.vercel.app", "https://sthaannix-real-estate2-sand.vercel.app"],
+//     credentials: true, 
+//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//     allowedHeaders: ["Content-Type", "Authorization"], 
+//   })
+// );
 app.use(
-  cors({ 
-    origin: ["http://localhost:5173", "http://localhost:5174", "https://sthaannix-real-estate.vercel.app", "https://sthaannix-real-estate2-sand.vercel.app"],
-    credentials: true, 
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"], 
+  cors({
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://sthaannix-real-estate.vercel.app",
+        "https://sthaannix-real-estate2-sand.vercel.app",
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
   })
 );
 app.use(express.json());
