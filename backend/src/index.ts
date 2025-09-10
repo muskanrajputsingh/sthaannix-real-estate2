@@ -34,6 +34,7 @@ app.use(
         "http://localhost:5174",
         "https://sthaannix-real-estate.vercel.app",
         "https://sthaannix-real-estate2-sand.vercel.app",
+        "https://sthaannix-real-estate2-7q9v.vercel.app",
       ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, origin);
