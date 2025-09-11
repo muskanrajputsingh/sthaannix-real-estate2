@@ -64,7 +64,7 @@ const Revenue = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 px-4 bg-gray-50">
+    <div className="min-h-screen pt-10 px-4 bg-gray-50">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">

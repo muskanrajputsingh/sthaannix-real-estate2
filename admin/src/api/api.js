@@ -107,8 +107,11 @@ export const adminAPI = {
   reviewTopup: (id, action) => api.patch(`/admin/topups/${id}`, { action }),
   getAllAdRequests: () => api.get("/ad/get"),
   updateAdStatus: (id, status) => api.put(`/ad/${id}/status`, { status }),
+  toggleAdRunningStatus: (id, action) =>
+    api.patch(`ad/status/${id}/toggle`, { action }),
   getAllContacts: () => api.get(`/contact/contacts`),
-  replyToContact: (contactId,replyText) => api.put(`/contact/reply/${contactId}`,{reply:replyText}),
+  replyToContact: (contactId, replyText) =>
+    api.put(`/contact/reply/${contactId}`, { reply: replyText }),
 };
 
 // Payments API calls
