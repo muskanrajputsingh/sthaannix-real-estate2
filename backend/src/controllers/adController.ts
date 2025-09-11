@@ -284,3 +284,65 @@ export const deleteAdRequest = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+// Admin starts/stops an ad campaign
+export const toggleAdRunningStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // ad campaign ID
+    const { action } = req.body; // "start" or "stop"
+
+    // Validate action
+    if (!["start", "stop"].includes(action)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid action. Allowed values: start, stop",
+      });
+    }
+
+    const campaign = await AdCampaign.findById(id);
+    if (!campaign) {
+      return res.status(404).json({
+        success: false,
+        message: "Ad campaign not found",
+      });
+    }
+
+    // START: only approved ads can be started
+    if (action === "start") {
+      if (campaign.status !== "approved") {
+        return res.status(400).json({
+          success: false,
+          message: "Only approved ads can be started",
+        });
+      }
+      campaign.status = "active"; // running
+    }
+
+    // STOP: only active ads can be stopped
+    if (action === "stop") {
+      if (campaign.status !== "active") {
+        return res.status(400).json({
+          success: false,
+          message: "Only active ads can be stopped",
+        });
+      }
+      campaign.status = "completed"; // stopped
+    }
+
+    await campaign.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Ad campaign ${action === "start" ? "started" : "stopped"} successfully`,
+      campaign,
+    });
+  } catch (error: any) {
+    console.error("Error toggling ad running status:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
