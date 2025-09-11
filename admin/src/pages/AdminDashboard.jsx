@@ -28,7 +28,7 @@ const AdminDashboard = () => {
   // Ads state
   const [ads, setAds] = useState([]);
   const [adsLoading, setAdsLoading] = useState(true);
-
+  const [loadingAction, setLoadingAction] = useState(null);
   // Properties state
   const [propertyLoading, setPropertyLoading] = useState(false);
   const [loadingId, setLoadingId] = useState(null);
@@ -194,6 +194,26 @@ const AdminDashboard = () => {
     }
   };
 
+const handleAdRunningStatus = async (id, action) => {
+  try {
+    setLoadingAction({ id, action });
+
+    await adminAPI.toggleAdRunningStatus(id, action);
+
+    toast.success(
+      `Ad campaign ${action === "start" ? "started" : "stopped"} successfully`
+    );
+
+    await loadAds(); // reload ads after update
+  } catch (error) {
+    console.error("Status change error:", error);
+    toast.error(error.response?.data?.message || "Failed to update ad campaign status");
+  } finally {
+    setLoadingAction(null);
+  }
+};
+
+
   useEffect(() => {
     if (activeTab === "users") {
       fetchUsersData();
@@ -330,7 +350,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 md:pt-24 px-4 bg-gray-50">
+    <div className="min-h-screen  pt-10 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         {/* Mobile menu button */}
         <div className="lg:hidden flex justify-between items-center mb-4">
@@ -515,6 +535,8 @@ const AdminDashboard = () => {
             adsLoading={adsLoading}
             approveAd={approveAd}
             rejectAd={rejectAd}
+            handleAdRunningStatus={handleAdRunningStatus}
+            loadingAction={loadingAction}
           />
         )}
         {activeTab === "properties" && (

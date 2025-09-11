@@ -131,7 +131,7 @@ const Appointments = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 md:pt-32 px-4 bg-gray-50">
+    <div className="min-h-screen pt-10 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         {/* Header and Search Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">

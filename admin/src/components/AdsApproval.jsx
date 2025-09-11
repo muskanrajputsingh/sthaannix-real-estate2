@@ -6,9 +6,19 @@ import {
   Image,
   TicketCheck,
   TicketX,
+  Loader,
+  Check,
+  X,
 } from "lucide-react";
 
-const AdsApproval = ({ ads, adsLoading, approveAd, rejectAd }) => {
+const AdsApproval = ({
+  ads,
+  adsLoading,
+  approveAd,
+  rejectAd,
+  handleAdRunningStatus,
+  loadingAction,
+}) => {
   console.log("ads: ", ads);
 
   if (adsLoading) {
@@ -258,6 +268,12 @@ const AdsApproval = ({ ads, adsLoading, approveAd, rejectAd }) => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Updated At
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Ads Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -329,6 +345,54 @@ const AdsApproval = ({ ads, adsLoading, approveAd, rejectAd }) => {
                     <td className="px-6 py-4">
                       {new Date(ad.updatedAt).toLocaleString()}
                     </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          ad.isRunning
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {ad.isRunning ? "Running" : "Stopped"}
+                      </span>
+                    </td>
+
+                   <td className="px-6 py-4">
+  <div className="flex justify-center gap-4 pt-2">
+    {ad.isRunning ? (
+      // Stop Button
+      <button
+        onClick={() => handleAdRunningStatus(ad._id, "stop")}
+        disabled={loadingAction?.id === ad._id}
+        className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        title="Stop"
+      >
+        {loadingAction?.id === ad._id ? (
+          <Loader className="animate-spin w-5 h-5" />
+        ) : (
+          <X className="w-5 h-5" />
+        )}
+        <span className="text-sm font-semibold">Stop</span>
+      </button>
+    ) : (
+      // Start Button
+      <button
+        onClick={() => handleAdRunningStatus(ad._id, "start")}
+        disabled={loadingAction?.id === ad._id}
+        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        title="Start"
+      >
+        {loadingAction?.id === ad._id ? (
+          <Loader className="animate-spin w-5 h-5" />
+        ) : (
+          <Check className="w-5 h-5" />
+        )}
+        <span className="text-sm font-semibold">Start</span>
+      </button>
+    )}
+  </div>
+</td>
+
                   </motion.tr>
                 ))}
               </tbody>
@@ -347,7 +411,7 @@ const AdsApproval = ({ ads, adsLoading, approveAd, rejectAd }) => {
             No rejected ads.
           </p>
         ) : (
-           <div className="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
+          <div className="overflow-x-auto bg-white rounded-xl shadow border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
