@@ -326,7 +326,7 @@ const BuilderDashboard = () => {
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  {/* <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th> */}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -351,12 +351,6 @@ const BuilderDashboard = () => {
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-xs sm:text-sm line-clamp-1 max-w-[100px] sm:max-w-none">{ad.platform.join(", ")}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-xs sm:text-sm">{new Date(ad.startDate).toLocaleDateString()}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-sm capitalize">{ad.status}</td>
-                    <td
-                      className={`px-3 py-2 sm:px-4 sm:py-4 text-sm capitalize 
-                        ${ad.isRunning ?  "text-green-500" : "text-red-500"}`}
-                    >
-                      {ad.isRunning ? "Running" : "Not Running"}
-                    </td>
                     {/* <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => handleDeleteAds(ad._id)}

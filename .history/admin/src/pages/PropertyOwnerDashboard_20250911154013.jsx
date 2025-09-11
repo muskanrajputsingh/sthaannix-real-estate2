@@ -4,9 +4,9 @@ import { Plus, Edit3, Trash2, TvMinimalPlay } from "lucide-react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import api from "../api/api";
-import { paymentsAPI } from '../api/api';
+import { paymentsAPI } from "../api/api";
 
-const BuilderDashboard = () => {
+const PropertyOwnerDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("properties");
   const [properties, setProperties] = useState([]);
@@ -16,8 +16,8 @@ const BuilderDashboard = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!user || user.role !== "builder") {
-      toast.error("Unauthorized. Please login as Builder.");
+    if (!user || user.role !== "owner") {
+      toast.error("Unauthorized. Please login as Owner.");
       navigate("/login");
       return;
     }
@@ -134,11 +134,10 @@ const BuilderDashboard = () => {
     loadAds();
   }, []);
 
-
   return (
     <div className="min-h-screen pt-16 px-3 sm:px-4 md:px-5 lg:px-6 bg-gray-50 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 md:mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold">Builder Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Owner Dashboard</h1>
         <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto"> 
           {activeTab === "properties" && (
             <button
@@ -292,7 +291,6 @@ const BuilderDashboard = () => {
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                 
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -351,12 +349,6 @@ const BuilderDashboard = () => {
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-xs sm:text-sm line-clamp-1 max-w-[100px] sm:max-w-none">{ad.platform.join(", ")}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-xs sm:text-sm">{new Date(ad.startDate).toLocaleDateString()}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-sm capitalize">{ad.status}</td>
-                    <td
-                      className={`px-3 py-2 sm:px-4 sm:py-4 text-sm capitalize 
-                        ${ad.isRunning ?  "text-green-500" : "text-red-500"}`}
-                    >
-                      {ad.isRunning ? "Running" : "Not Running"}
-                    </td>
                     {/* <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => handleDeleteAds(ad._id)}
@@ -459,4 +451,4 @@ const BuilderDashboard = () => {
   );
 };
 
-export default BuilderDashboard;
+export default PropertyOwnerDashboard;

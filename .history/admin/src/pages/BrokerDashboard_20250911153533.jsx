@@ -6,7 +6,7 @@ import axios from "axios";
 import api from "../api/api";
 import { paymentsAPI } from '../api/api';
 
-const BuilderDashboard = () => {
+const BrokerDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("properties");
   const [properties, setProperties] = useState([]);
@@ -16,8 +16,8 @@ const BuilderDashboard = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!user || user.role !== "builder") {
-      toast.error("Unauthorized. Please login as Builder.");
+    if (!user || user.role !== "broker") {
+      toast.error("Unauthorized. Please login as Broker.");
       navigate("/login");
       return;
     }
@@ -25,7 +25,8 @@ const BuilderDashboard = () => {
     if (activeTab === "properties") fetchProperties();
     else if (activeTab === "payments") loadPayments(user.email);
     else if (activeTab === "ads") loadAds(user.id);
-    else if (activeTab === "property-list") fetchProperties();
+     else if (activeTab === "property-list") fetchProperties();
+
   }, [activeTab]);
 
  const fetchProperties = async () => {
@@ -56,42 +57,42 @@ const BuilderDashboard = () => {
   }
 };
 
-  const loadPayments = async (email) => {
-    setLoading(true);
-    try {
-      const res = await paymentsAPI.myPayments();
+const loadPayments = async (email) => {
+  setLoading(true);
+  try {
+    const res = await paymentsAPI.myPayments();
 
-      if (res.data?.success) {
-        setPayments(res.data.transactions);
-      } else {
-        toast.error("Failed to load payments");
-        setPayments([]);
-      }
-    } catch (error) {
-      console.error("Load payments error:", error);
-      toast.error("Failed to load payments from server");
+    if (res.data?.success) {
+      setPayments(res.data.transactions);
+    } else {
+      toast.error("Failed to load payments");
       setPayments([]);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Load payments error:", error);
+    toast.error("Failed to load payments from server");
+    setPayments([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const loadAds = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const res = await api.get("/ad/my-ads", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+const loadAds = async () => {
+  setLoading(true);
+  try {
+    const token = localStorage.getItem("token");
+    const res = await api.get("/ad/my-ads", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      setAds(res.data.campaigns);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load advertisement details");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setAds(res.data.campaigns);
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to load advertisement details");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDeleteProperty = async (id) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
@@ -110,8 +111,6 @@ const BuilderDashboard = () => {
       }
     }
   };
-
-
 
   // const handleDeleteAds = async (id) => {
   //   if (!window.confirm("Are you sure you want to delete this ad?")) return;
@@ -134,11 +133,10 @@ const BuilderDashboard = () => {
     loadAds();
   }, []);
 
-
   return (
     <div className="min-h-screen pt-16 px-3 sm:px-4 md:px-5 lg:px-6 bg-gray-50 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 md:mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold">Builder Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Broker Dashboard</h1>
         <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto"> 
           {activeTab === "properties" && (
             <button
@@ -209,8 +207,7 @@ const BuilderDashboard = () => {
       {/* Tab Content */}
       {loading ? (
         <div className="text-center py-12 md:py-20 text-base md:text-lg">Loading...</div>
-      ) : activeTab === "properties" ? (
-       // show only approved properties
+      ): activeTab === "properties" ? (
         properties.filter(p => p.status === "approved").length === 0 ? (
           <div className="text-center py-12 md:py-20 text-base md:text-lg">No properties found.</div>
         ) : (
@@ -292,7 +289,6 @@ const BuilderDashboard = () => {
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                 
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -304,7 +300,6 @@ const BuilderDashboard = () => {
                     <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-xs sm:text-sm">{new Date(payment.createdAt).toLocaleString()}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-sm">{payment.purpose || "Wallet Top-up"}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-sm">{payment.status || "-"}</td>
-                  
                   </tr>
                 ))}
               </tbody>
@@ -326,7 +321,7 @@ const BuilderDashboard = () => {
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
                   <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  {/* <th className="px-3 py-2 sm:px-4 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th> */}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -351,12 +346,7 @@ const BuilderDashboard = () => {
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-xs sm:text-sm line-clamp-1 max-w-[100px] sm:max-w-none">{ad.platform.join(", ")}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-xs sm:text-sm">{new Date(ad.startDate).toLocaleDateString()}</td>
                     <td className="px-3 py-2 sm:px-4 sm:py-4 text-sm capitalize">{ad.status}</td>
-                    <td
-                      className={`px-3 py-2 sm:px-4 sm:py-4 text-sm capitalize 
-                        ${ad.isRunning ?  "text-green-500" : "text-red-500"}`}
-                    >
-                      {ad.isRunning ? "Running" : "Not Running"}
-                    </td>
+                    
                     {/* <td className="px-3 py-2 sm:px-4 sm:py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => handleDeleteAds(ad._id)}
@@ -459,4 +449,4 @@ const BuilderDashboard = () => {
   );
 };
 
-export default BuilderDashboard;
+export default BrokerDashboard;
