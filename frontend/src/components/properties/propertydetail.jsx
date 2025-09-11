@@ -45,7 +45,9 @@ const PropertyDetails = () => {
   });
   const [inquirySubmitting, setInquirySubmitting] = useState(false);
   const [inquirySuccess, setInquirySuccess] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user,setUser]=useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
   const [whatsappNum, setWhatsappNum] = useState(null);
 
   const images = React.useMemo(() => {
@@ -63,9 +65,9 @@ const PropertyDetails = () => {
 
   const whatsappMessage = `Hello! I'm interested in your property: ${
     property?.title || ""
-  } at ${locationString}. Price: ₹${Number(
-    property?.price || 0
-  ).toLocaleString("en-IN")}. Please contact me for more details.`;
+  } at ${locationString}. Price: ₹${Number(property?.price || 0).toLocaleString(
+    "en-IN"
+  )}. Please contact me for more details.`;
   const encodedMessage = encodeURIComponent(whatsappMessage);
   const whatsappUrl = `https://wa.me/${whatsappNum}?text=${encodedMessage}`;
 
@@ -184,6 +186,22 @@ const PropertyDetails = () => {
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault();
+
+    if (!currentUser) {
+    toast.error("Please log in to make an inquiry.");
+    return;
+  }
+
+  if (currentUser.role !== "buyer") {
+    toast.error("Only buyers can send inquiries.");
+    setInquiryData({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+    return;
+  }
     if (!property?._id) {
       toast.error("Property not loaded yet.");
       return;
@@ -214,6 +232,12 @@ const PropertyDetails = () => {
       setInquirySubmitting(false);
     }
   };
+  useEffect(() => {
+  const getUser = getLocalStorage("user");
+  if (getUser) {
+    setCurrentUser(getUser);
+  }
+}, []);
 
   // Preload and Auto-play images safely
   useEffect(() => {
