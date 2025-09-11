@@ -192,19 +192,50 @@ export const getAllAdRequests = async (req: Request, res: Response) => {
 
 
 // Get ads of logged-in user
+// export const getUserAdRequests = async (req: Request, res: Response) => {
+//   try {
+//     const userId = (req as any).user.id; // from JWT middleware
+
+//     const campaigns = await AdCampaign.find({ user: userId })
+//       .populate("property") // get full property details
+//       .populate("user", "name email phone walletBalance") // fetch specific user fields
+//       .sort({ createdAt: -1 });
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "User's ad requests fetched successfully",
+//       campaigns,
+//     });
+//   } catch (error: any) {
+//     console.error("Error fetching user ad requests:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error: error.message,
+//     });
+//   }
+// };
+
+// Get ads of logged-in user
 export const getUserAdRequests = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id; // from JWT middleware
+    const userId = (req as any).user.id;
 
     const campaigns = await AdCampaign.find({ user: userId })
-      .populate("property") // get full property details
-      .populate("user", "name email phone walletBalance") // fetch specific user fields
+      .populate("property")
+      .populate("user", "name email phone walletBalance")
       .sort({ createdAt: -1 });
+
+    // Add derived "isRunning" field
+    const campaignsWithRunningStatus = campaigns.map((campaign: any) => ({
+      ...campaign.toObject(),
+      isRunning: campaign.status === "active"
+    }));
 
     return res.status(200).json({
       success: true,
       message: "User's ad requests fetched successfully",
-      campaigns,
+      campaigns: campaignsWithRunningStatus,
     });
   } catch (error: any) {
     console.error("Error fetching user ad requests:", error);
@@ -215,6 +246,7 @@ export const getUserAdRequests = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 // Admin starts/stops an ad campaign
 export const toggleAdRunningStatus = async (req: Request, res: Response) => {
