@@ -299,7 +299,7 @@ const PropertiesPage = () => {
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -20, opacity: 0 }}
-                className="lg:col-span-1"
+                className="hidden lg:block lg:col-span-1"
               >
                 <FilterSection
                   filters={filters}
@@ -309,7 +309,7 @@ const PropertiesPage = () => {
               </motion.aside>
             )}
           </AnimatePresence>
- 
+
           <div
             className={`${
               viewState.showFilters ? "lg:col-span-3" : "lg:col-span-4"
@@ -381,6 +381,23 @@ const PropertiesPage = () => {
                   </div>
                 </div>
               </div>
+
+              <AnimatePresence>
+                {viewState.showFilters && (
+                  <motion.div
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    className="block lg:hidden w-full mt-4"
+                  >
+                    <FilterSection
+                      filters={filters}
+                      setFilters={setFilters}
+                      onApplyFilters={handleFilterChange}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <motion.div
@@ -390,7 +407,7 @@ const PropertiesPage = () => {
                   ? "grid-cols-1 md:grid-cols-2"
                   : "grid-cols-1"
               }`}
-            > 
+            >
               <AnimatePresence>
                 {filteredProperties.length > 0 ? (
                   filteredProperties.map((property) => (
