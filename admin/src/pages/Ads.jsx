@@ -13,6 +13,8 @@ const Ads = ({ user }) => {
   const [platform, setPlatform] = useState("");
   const [startDate, setStartDate] = useState("");
   const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPhone, setUserPhone] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
 
   // Fetch property details if id exists
@@ -30,6 +32,8 @@ useEffect(() => {
   if (userData) {
     const parsedUser = JSON.parse(userData);
     setUserName(parsedUser.name);
+    setUserEmail(parsedUser.email);
+    setUserPhone(parsedUser.phone);
     setCurrentUser(parsedUser); 
   }
 }, []);
@@ -53,7 +57,7 @@ const handleSubmit = async (e) => {
 
   try {
     const response = await axios.post(`${Backendurl}/ad/create`, {
-      userId: currentUser.id, // use 'id' instead of '_id'
+      userId: currentUser.id, 
       propertyId: id,
       budget: Number(budget), // convert to number
       platform: [platform],
@@ -83,6 +87,26 @@ const handleSubmit = async (e) => {
           <input
             type="text"
             value={userName}
+            readOnly
+            className="border p-2 w-full"
+          />
+        </div>
+
+         <div>
+          <label>User Email</label>
+          <input
+            type="text"
+            value={userEmail}
+            readOnly
+            className="border p-2 w-full"
+          />
+        </div>
+
+         <div>
+          <label>User Phone</label>
+          <input
+            type="text"
+            value={userPhone}
             readOnly
             className="border p-2 w-full"
           />
