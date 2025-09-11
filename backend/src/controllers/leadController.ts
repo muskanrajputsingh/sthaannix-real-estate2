@@ -70,7 +70,7 @@ export const createLead = async (req: Request, res: Response) => {
         propertyTitle: property.title,
         buyerName: username?.name,
         buyerEmail: username?.email,
-
+        buyerPhone : username?.phone,
         price: property.price,
         message,
       });

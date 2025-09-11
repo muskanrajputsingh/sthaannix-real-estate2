@@ -115,6 +115,7 @@ export const sendLeadNotification = async (
     propertyTitle: string;
     buyerName: string | undefined;
     buyerEmail: string | undefined;
+    buyerPhone:string | undefined;
     message?: string;
     price: number;
   }
@@ -133,6 +134,7 @@ export const sendLeadNotification = async (
           <p><strong>Price:</strong> ₹${leadData.price.toLocaleString()}</p>
           <p><strong>Name:</strong> ${leadData.buyerName}</p>
           <p><strong>From:</strong> ${leadData.buyerEmail}</p>
+           <p><strong>From:</strong> ${leadData.buyerPhone}</p>
           ${leadData.message ? `<p><strong>Message:</strong> ${leadData.message}</p>` : ""}
         </div>
                 
