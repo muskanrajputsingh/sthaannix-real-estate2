@@ -1,21 +1,34 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { MapPin, BedDouble, Bath, Maximize, Tag, User, Calendar, Star, AlertCircle } from "lucide-react";
+import {
+  MapPin,
+  BedDouble,
+  Bath,
+  Maximize,
+  Tag,
+  User,
+  Calendar,
+  Star,
+  AlertCircle,
+  ArrowLeft,
+} from "lucide-react";
 import http from "../api/http";
 import { Backendurl } from "../config/constants";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 const PropertyDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [userId,setUserId]=useState(null);
-  const [userData,setUserData]=useState(null);
+  const [userId, setUserId] = useState(null);
+  const [userData, setUserData] = useState(null);
   useEffect(() => {
     const fetchProperty = async () => {
       try {
         const res = await http.get(`${Backendurl}/properties/get-by-id/${id}`);
         // console.log('fetchProperty',res.data);
-        
+
         setProperty(res.data);
         // setUserId(res.data.owner)
       } catch (err) {
@@ -26,24 +39,22 @@ const PropertyDetails = () => {
     };
     fetchProperty();
   }, [id]);
-  
-//   useEffect(() => {
-//     const fetchUser = async () => {
-//       try {
-//         const res = await http.get(`${Backendurl}/user/get-by-id/${userId}`);
-//         console.log('fetchUser',res.data);
-        
-//         setUserData(res.data.user);
-//       } catch (err) {
-//         console.error("Error fetching User:", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchUser();
-//   }, [id,userId]);
 
-  
+  //   useEffect(() => {
+  //     const fetchUser = async () => {
+  //       try {
+  //         const res = await http.get(`${Backendurl}/user/get-by-id/${userId}`);
+  //         console.log('fetchUser',res.data);
+
+  //         setUserData(res.data.user);
+  //       } catch (err) {
+  //         console.error("Error fetching User:", err);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+  //     fetchUser();
+  //   }, [id,userId]);
 
   if (loading) {
     return (
@@ -80,15 +91,30 @@ const PropertyDetails = () => {
   }
 
   if (!property) {
-    return <p className="text-center text-gray-500 mt-10">Property not found</p>;
+    return (
+      <p className="text-center text-gray-500 mt-10">Property not found</p>
+    );
   }
 
- return (
+  return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Images */}
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 px-4 py-2 mb-4 text-sm font-medium text-gray-700 
+             bg-white border border-gray-300 rounded-lg shadow-sm 
+             hover:bg-gray-100 hover:text-gray-900 
+             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
+             transition-all duration-200"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        Back
+      </button>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {property?.images?.length > 0 ? (
-          property?.images.map((img,i) => (
+          property?.images.map((img, i) => (
             <img
               key={i}
               src={img}
@@ -107,7 +133,9 @@ const PropertyDetails = () => {
 
       {/* Title + Price */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{property.title}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          {property.title}
+        </h1>
         <p className="text-gray-600 mb-4">{property.description}</p>
         <div className="flex items-center justify-between">
           <p className="text-2xl font-bold text-blue-600">
