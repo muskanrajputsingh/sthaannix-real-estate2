@@ -7,7 +7,8 @@ export interface IAdCampaign extends Document {
   budget: number;
   platform: ("meta ads" | "google ads")[];
   startDate: Date;
-  status: "pending" | "approved" | "rejected" | "active" | "completed" | "cancelled";
+  status: "pending" | "approved" | "rejected" | "completed" | "cancelled"; 
+  isRunning: boolean; // ✅ new field
 }
 
 const AdCampaignSchema = new Schema<IAdCampaign>(
@@ -23,9 +24,10 @@ const AdCampaignSchema = new Schema<IAdCampaign>(
     startDate: { type: Date },
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected", "active", "completed", "cancelled"],
+      enum: ["pending", "approved", "rejected", "completed", "cancelled"],
       default: "pending",
     },
+    isRunning: { type: Boolean, default: false }, // ✅ separate running flag
   },
   { timestamps: true }
 );

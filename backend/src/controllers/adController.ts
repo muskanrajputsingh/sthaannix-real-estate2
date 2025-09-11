@@ -140,45 +140,17 @@ export const updateAdStatus = async (req: Request, res: Response) => {
 
 
 // Admin gets all ad requests
-// export const getAllAdRequests = async (req: Request, res: Response) => {
-//   try {
-//     const campaigns = await AdCampaign.find()
-//       .populate("property") // get full property details
-//       .populate("user", "name email phone walletBalance")// fetch property details
-//       .sort({ createdAt: -1 }); // newest first
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "All ad requests fetched successfully",
-//       campaigns,
-//     });
-//   } catch (error: any) {
-//     console.error("Error fetching ad requests:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Server error",
-//       error: error.message,
-//     });
-//   }
-// };
-// Admin gets all ad requests
 export const getAllAdRequests = async (req: Request, res: Response) => {
   try {
     const campaigns = await AdCampaign.find()
-      .populate("property")
-      .populate("user", "name email phone walletBalance")
-      .sort({ createdAt: -1 });
-
-    // Add derived "isRunning" field
-    const campaignsWithRunningStatus = campaigns.map((campaign: any) => ({
-      ...campaign.toObject(),
-      isRunning: campaign.status === "active" // true if ad is running
-    }));
+      .populate("property") // get full property details
+      .populate("user", "name email phone walletBalance")// fetch property details
+      .sort({ createdAt: -1 }); // newest first
 
     return res.status(200).json({
       success: true,
       message: "All ad requests fetched successfully",
-      campaigns: campaignsWithRunningStatus,
+      campaigns,
     });
   } catch (error: any) {
     console.error("Error fetching ad requests:", error);
@@ -192,50 +164,19 @@ export const getAllAdRequests = async (req: Request, res: Response) => {
 
 
 // Get ads of logged-in user
-// export const getUserAdRequests = async (req: Request, res: Response) => {
-//   try {
-//     const userId = (req as any).user.id; // from JWT middleware
-
-//     const campaigns = await AdCampaign.find({ user: userId })
-//       .populate("property") // get full property details
-//       .populate("user", "name email phone walletBalance") // fetch specific user fields
-//       .sort({ createdAt: -1 });
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "User's ad requests fetched successfully",
-//       campaigns,
-//     });
-//   } catch (error: any) {
-//     console.error("Error fetching user ad requests:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Server error",
-//       error: error.message,
-//     });
-//   }
-// };
-
-// Get ads of logged-in user
 export const getUserAdRequests = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.id; // from JWT middleware
 
     const campaigns = await AdCampaign.find({ user: userId })
-      .populate("property")
-      .populate("user", "name email phone walletBalance")
+      .populate("property") // get full property details
+      .populate("user", "name email phone walletBalance") // fetch specific user fields
       .sort({ createdAt: -1 });
-
-    // Add derived "isRunning" field
-    const campaignsWithRunningStatus = campaigns.map((campaign: any) => ({
-      ...campaign.toObject(),
-      isRunning: campaign.status === "active"
-    }));
 
     return res.status(200).json({
       success: true,
       message: "User's ad requests fetched successfully",
-      campaigns: campaignsWithRunningStatus,
+      campaigns,
     });
   } catch (error: any) {
     console.error("Error fetching user ad requests:", error);
@@ -251,10 +192,9 @@ export const getUserAdRequests = async (req: Request, res: Response) => {
 // Admin starts/stops an ad campaign
 export const toggleAdRunningStatus = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; // ad campaign ID
+    const { id } = req.params; 
     const { action } = req.body; // "start" or "stop"
 
-    // Validate action
     if (!["start", "stop"].includes(action)) {
       return res.status(400).json({
         success: false,
@@ -270,27 +210,26 @@ export const toggleAdRunningStatus = async (req: Request, res: Response) => {
       });
     }
 
-    // START: only approved ads can be started
-  if (action === "start") {
-  if (!["approved", "completed"].includes(campaign.status)) {
-    return res.status(400).json({
-      success: false,
-      message: "Only approved or completed ads can be started",
-    });
-  }
-  campaign.status = "active";
-}
-
-
-    // STOP: only active ads can be stopped
-    if (action === "stop") {
-      if (campaign.status !== "active") {
+    // START
+    if (action === "start") {
+      if (campaign.status !== "approved") {
         return res.status(400).json({
           success: false,
-          message: "Only active ads can be stopped",
+          message: "Only approved ads can be started",
         });
       }
-      campaign.status = "completed"; // stopped
+      campaign.isRunning = true;
+    }
+
+    // STOP
+    if (action === "stop") {
+      if (!campaign.isRunning) {
+        return res.status(400).json({
+          success: false,
+          message: "Ad is not running",
+        });
+      }
+      campaign.isRunning = false;
     }
 
     await campaign.save();
@@ -309,6 +248,7 @@ export const toggleAdRunningStatus = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 // Delete ad request
 export const deleteAdRequest = async (req: Request, res: Response) => {
