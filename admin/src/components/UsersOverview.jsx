@@ -324,7 +324,7 @@ const UsersOverview = ({ users, stats, usersLoading, statsLoading }) => {
 
   return (
     <>
-      {/* Stats cards -- 1 column mobile, 4 desktop */}
+      
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <motion.div className="bg-white rounded-2xl p-6 shadow-sm border flex items-center gap-4">
           <div className="p-3 bg-blue-100 rounded-xl">
