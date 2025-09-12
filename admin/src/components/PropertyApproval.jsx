@@ -90,7 +90,7 @@ const PropertyApproval = ({
                 >
                   <td className="px-6 py-4">{idx + 1}</td>
                   <td className="px-6 py-4">{property.title || "-"}</td>
-                  <td className="px-6 py-4">
+                 <td className="px-6 py-4 whitespace-normal break-words min-w-[250px]">
                     {property.location?.address || "-"},{" "}
                     {property.location?.city || "-"},{" "}
                     {property.location?.state || "-"}
@@ -235,7 +235,7 @@ const PropertyApproval = ({
                   >
                     <td className="px-6 py-4">{idx + 1}</td>
                     <td className="px-6 py-4">{property.title || "-"}</td>
-                    <td className="px-6 py-4 whitespace-normal break-words">
+                  <td className="px-6 py-4 whitespace-normal break-words min-w-[250px]">
                       {property.location?.address || "-"},{" "}
                       {property.location?.city || "-"},{" "}
                       {property.location?.state || "-"}
