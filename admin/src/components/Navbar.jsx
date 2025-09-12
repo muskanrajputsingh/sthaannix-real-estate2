@@ -716,7 +716,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       }
     };
     fetchBalance();
-    const interval = setInterval(fetchBalance, 30000);
+    const interval = setInterval(fetchBalance, 10000);
     return () => clearInterval(interval);
   }, []);
 
