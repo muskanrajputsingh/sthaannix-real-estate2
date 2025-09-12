@@ -96,8 +96,6 @@ const AdminDashboard = () => {
     try {
       setAdsLoading(true);
       const response = await adminAPI.getAllAdRequests();
-      console.log("response: ",response);
-      
       if (response.status === 200) {
         setAds(response.data.campaigns || []);
       } else {

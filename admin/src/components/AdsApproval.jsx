@@ -19,8 +19,6 @@ const AdsApproval = ({
   handleAdRunningStatus,
   loadingAction,
 }) => {
-  console.log("ads: ", ads);
-
   if (adsLoading) {
     return (
       <motion.div

@@ -372,7 +372,6 @@
 //   );
 // };
 
-
 // export default Navbar;
 
 // import { useState, useEffect } from 'react';
@@ -631,10 +630,9 @@ import {
 } from "lucide-react";
 import { userAPI } from "../api/api";
 
-const Sidebar = () => {
+const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [balance, setBalance] = useState(0);
 
@@ -723,158 +721,176 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <motion.aside
-      initial={{ x: -280 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 0.3 }}
-      className={`fixed left-0 top-0 h-full bg-white shadow-lg border-r border-gray-200 z-50 transition-all duration-300 ${
-        isCollapsed ? "w-20" : "w-64"
-      }`}
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        {!isCollapsed ? (
-          <Link to="/dashboard" className="flex items-center group">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300"
-            >
-              <Home className="h-5 w-5 text-white" />
-            </motion.div>
-            <div className="ml-3">
-              <span className="text-lg font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
-                Sthaanix
-              </span>
-              <div className="text-xs text-gray-500 font-medium">
-                Admin Panel
-              </div>
-            </div>
-          </Link>
-        ) : (
-          <Link to="/dashboard" className="flex justify-center">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg transition-all duration-300"
-            >
-              <Home className="h-6 w-6 text-white" />
-            </motion.div>
-          </Link>
-        )}
-
-        <motion.button
-          onClick={toggleSidebar}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+    <>
+      {user?.role.toLowerCase() !== "admin" && (
+        <div
+          className="fixed top-4 right-4 z-50 bg-blue-100 text-blue-700 font-semibold rounded-md px-4 py-2 shadow-lg "
+          title="Wallet Balance"
         >
-          {isCollapsed ? (
-            <ChevronRight className="h-6 w-6" />
-          ) : (
-            <ChevronLeft className="h-6 w-6" />
-          )}
-        </motion.button>
-      </div>
+          <button className="w-full text-left  text-sm text-gray-700 flex items-center">
+            <HandCoins className="h-4 w-4 mr-2" />
+            Balance: ₹{balance === 0 ? "0" : balance}
+          </button>
+        </div>
+      )}
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-2">
-        {navItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-              isActive(item.path)
-                ? "text-blue-700 bg-blue-50 shadow-sm border border-blue-100"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-            }`}
-            title={isCollapsed ? item.label : ""}
-          >
-            <item.icon
-              className={`transition-colors ${
-                isActive(item.path) ? "text-blue-600" : "text-gray-500"
-              } ${isCollapsed ? "mx-auto h-6 w-6" : "mr-3 h-5 w-5"}`}
-            />
-            {!isCollapsed && item.label}
-          </Link>
-        ))}
-      </nav>
-
-      {/* Profile Section */}
-      <div className="p-4 border-t border-gray-200/50">
-        <motion.div className="relative flex justify-center">
-          <motion.button
-            onClick={toggleProfile}
-            className={`flex items-center ${
-              isCollapsed ? "justify-center w-12 h-12" : "w-full"
-            } p-2 rounded-xl hover:bg-gray-50 transition-all duration-200`}
-          >
-            <div
-              className={`${
-                isCollapsed ? "h-10 w-10" : "h-8 w-8"
-              } bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center`}
-            >
-              <User
-                className={`${isCollapsed ? "h-6 w-6" : "h-4 w-4"} text-white`}
-              />
-            </div>
-            {!isCollapsed && (
-              <>
-                <div className="ml-3 text-left">
-                  <div className="text-sm font-medium text-gray-900">
-                    {formatRoleName(user?.role)}
-                  </div>
+      <motion.aside
+        initial={{ x: -280 }}
+        animate={{ x: 0 }}
+        transition={{ duration: 0.3 }}
+        className={`fixed left-0 top-0 h-full bg-white shadow-lg border-r border-gray-200 z-50 transition-all duration-300 ${
+          isCollapsed ? "w-20" : "w-64"
+        }`}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          {!isCollapsed ? (
+            <Link to="/dashboard" className="flex items-center group">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300"
+              >
+                <Home className="h-5 w-5 text-white" />
+              </motion.div>
+              <div className="ml-3">
+                <span className="text-lg font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                  Sthaanix
+                </span>
+                <div className="text-xs text-gray-500 font-medium">
+                  Admin Panel
                 </div>
-                <ChevronDown
-                  className={`ml-auto h-4 w-4 text-gray-500 transition-transform duration-200 ${
-                    isProfileOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </>
+              </div>
+            </Link>
+          ) : (
+            <Link to="/dashboard" className="flex justify-center">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg transition-all duration-300"
+              >
+                <Home className="h-6 w-6 text-white" />
+              </motion.div>
+            </Link>
+          )}
+
+          <motion.button
+            onClick={toggleSidebar}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 ml-6"
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-6 w-6" />
+            ) : (
+              <ChevronLeft className="h-6 w-6" />
             )}
           </motion.button>
+        </div>
 
-          {/* Dropdown */}
-          <AnimatePresence>
-            {isProfileOpen && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className={`absolute ${
-                  isCollapsed ? "left-14 top-full mt-2" : "left-0 top-full mt-2"
-                } w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50`}
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                isActive(item.path)
+                  ? "text-blue-700 bg-blue-50 shadow-sm border border-blue-100"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              }`}
+              title={isCollapsed ? item.label : ""}
+            >
+              <item.icon
+                className={`transition-colors ${
+                  isActive(item.path) ? "text-blue-600" : "text-gray-500"
+                } ${isCollapsed ? "mx-auto h-6 w-6" : "mr-3 h-5 w-5"}`}
+              />
+              {!isCollapsed && item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Profile Section */}
+        <div className="p-4 border-t border-gray-200/50">
+          <motion.div className="relative flex justify-center">
+            <motion.button
+              onClick={toggleProfile}
+              className={`flex items-center ${
+                isCollapsed ? "justify-center w-12 h-12" : "w-full"
+              } p-2 rounded-xl hover:bg-gray-50 transition-all duration-200`}
+            >
+              <div
+                className={`${
+                  isCollapsed ? "h-10 w-10" : "h-8 w-8"
+                } bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center`}
               >
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <div className="text-sm font-medium text-gray-900">
-                    Admin Panel
+                <User
+                  className={`${
+                    isCollapsed ? "h-6 w-6" : "h-4 w-4"
+                  } text-white`}
+                />
+              </div>
+              {!isCollapsed && (
+                <>
+                  <div className="ml-3 text-left">
+                    <div className="text-sm font-medium text-gray-900">
+                      {formatRoleName(user?.role)}
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-500">
-                    Manage your properties
-                  </div>
-                </div>
+                  <ChevronDown
+                    className={`ml-auto h-4 w-4 text-gray-500 transition-transform duration-200 ${
+                      isProfileOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </>
+              )}
+            </motion.button>
 
-                {user?.role.toLowerCase() !== "admin" && (
-                  <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
-                    <HandCoins className="h-4 w-4 mr-2" />
-                    Balance: {balance === 0 ? "0" : balance}
-                  </button>
-                )}
-
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center"
+            {/* Dropdown */}
+            <AnimatePresence>
+              {isProfileOpen && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className={`absolute ${
+                    isCollapsed
+                      ? "left-14 top-full mt-2"
+                      : "left-0 top-full mt-2"
+                  } w-48 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50`}
                 >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
-    </motion.aside>
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <div className="text-sm font-medium text-gray-900">
+                      Admin Panel
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Manage your properties
+                    </div>
+                  </div>
+
+                  {user?.role.toLowerCase() !== "admin" && (
+                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center">
+                      <HandCoins className="h-4 w-4 mr-2" />
+                      Balance: {balance === 0 ? "0" : balance}
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </motion.aside>
+    </>
   );
 };
 
