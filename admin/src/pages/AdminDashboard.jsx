@@ -348,8 +348,8 @@ const handleAdRunningStatus = async (id, action) => {
   }
 
   return (
-    <div className="min-h-screen  pt-10 px-4 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen  pt-10 px-4 bg-gray-50  overflow-x-hidden">
+      <div className="max-w-[66rem] mx-auto">
         {/* Mobile menu button */}
         <div className="lg:hidden flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
