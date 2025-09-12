@@ -186,7 +186,7 @@ const PropertyApproval = ({
           </p>
         ) : (
           <div className="overflow-x-auto bg-white rounded-xl shadow border">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">
@@ -235,7 +235,7 @@ const PropertyApproval = ({
                   >
                     <td className="px-6 py-4">{idx + 1}</td>
                     <td className="px-6 py-4">{property.title || "-"}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 whitespace-normal break-words">
                       {property.location?.address || "-"},{" "}
                       {property.location?.city || "-"},{" "}
                       {property.location?.state || "-"}
@@ -286,6 +286,7 @@ const PropertyApproval = ({
           </div>
         )}
       </section>
+
     </>
   );
 };
