@@ -109,7 +109,7 @@ export const listTopUpRequests = async (req: Request, res: Response) => {
     const { status, utrNumber } = req.query as { status?: string; utrNumber?: string };
     const query: any = {};
     if (status) query.status = status;
-    if (utrNumber) query.utrNumber = utrNumber; 
+    if (utrNumber) query.utrNumber = utrNumber; //  Allow filtering by UTR number
 
     const requests = await TopUpRequest.find(query)
       .populate("user", "name email")
