@@ -114,7 +114,7 @@ export const getLeadsForMyProperties = async (req: Request, res: Response) => {
 
     const leads = await Lead.find(query)
       .populate("property", "title price location.city")
-      .populate("buyer", "name email")
+      .populate("buyer", "name email phone")
       .sort({ createdAt: -1 });
 
     res.json(leads);

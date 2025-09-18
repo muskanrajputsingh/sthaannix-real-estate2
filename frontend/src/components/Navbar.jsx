@@ -441,7 +441,7 @@ const NavLinks = ({ currentPath, handleNavigation }) => {
       path: "/properties",
       icon: Search,
       color: "from-green-500 to-emerald-500",
-      description: "Find your dream",
+      description: "Find your dream property",
     },
     {
       name: "About Us",
@@ -536,7 +536,7 @@ const MobileNavLinks = ({
       path: "/properties",
       icon: Search,
       color: "from-green-500 to-emerald-500",
-      description: "Find your dream",
+      description: "Find your dream property",
     },
     {
       name: "About Us",
