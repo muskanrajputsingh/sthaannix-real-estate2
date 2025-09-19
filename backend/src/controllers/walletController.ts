@@ -109,7 +109,7 @@ export const listTopUpRequests = async (req: Request, res: Response) => {
     const { status, utrNumber } = req.query as { status?: string; utrNumber?: string };
     const query: any = {};
     if (status) query.status = status;
-    if (utrNumber) query.utrNumber = utrNumber; //  Allow filtering by UTR number
+    if (utrNumber) query.utrNumber = utrNumber; 
 
     const requests = await TopUpRequest.find(query)
       .populate("user", "name email")
@@ -161,7 +161,7 @@ export const reviewTopUpRequest = async (req: Request, res: Response) => {
     }
 
     if (utrNumber) {
-      topUp.utrNumber = utrNumber; // Admin can update/add UTR No during review
+      topUp.utrNumber = utrNumber;
     }
 
     if (paymentMethod) {

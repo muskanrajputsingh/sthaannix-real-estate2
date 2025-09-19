@@ -229,6 +229,9 @@ const Appointments = () => {
                           <p className="text-sm text-gray-500">
                             {appointment.buyer?.email || "Unknown"}
                           </p>
+                           <p className="text-sm text-gray-500">
+                            {appointment.buyer?.phone || "Unknown"}
+                          </p>
                         </div>
                       </div>
                     </td>

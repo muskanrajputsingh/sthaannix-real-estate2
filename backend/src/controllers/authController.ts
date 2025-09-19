@@ -261,10 +261,18 @@ export const requestRoleUpgrade = async (req: Request, res: Response) => {
         "Role upgrade payment proof submitted. Waiting for admin approval.",
       payment,
     });
-  } catch (error) {
-    console.error("RoleUpgrade Error:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
+  } catch (error: any) {
+  console.error("RoleUpgrade Error:", error);
+
+  // Handle duplicate UTR
+  if (error.code === 11000 && error.keyPattern?.utrNumber) {
+    return res.status(400).json({
+      message: "This UTR number already exists. Please provide a unique UTR number.",
+    });
+  }
+
+  res.status(500).json({ message: "Server error" });
+}
 };
 
 
