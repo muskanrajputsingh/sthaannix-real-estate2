@@ -176,7 +176,7 @@ const Hero = () => {
         </div>
 
         {/* Sparkle effects */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* <div className="absolute inset-0 pointer-events-none">
           {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
@@ -191,7 +191,7 @@ const Hero = () => {
               <Sparkles className="w-full h-full" />
             </motion.div>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* Main Content */}
