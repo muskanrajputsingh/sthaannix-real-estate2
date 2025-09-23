@@ -74,7 +74,7 @@ export const submitAdRequest = async (req: Request, res: Response) => {
       message: "Ad request submitted successfully & wallet Updated",
       campaign: newCampaign,
       previousBalance,              // balance before deduction
-      deductedAmount: budget,       // clarity on deduction
+      deductedAmount: budget,       // clarity on deduction //
       remainingBalance: user.walletBalance, // after deduction
     });
   } catch (error: any) {
